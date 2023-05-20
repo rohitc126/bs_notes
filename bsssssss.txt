@@ -1,0 +1,43 @@
+    public DataTable SELECT_BS_NOTES(string FINANCIAL_YR, string COMP_NAME)
+    {
+        DAL_FA_LedgerMapping BS_NOTES = new DAL_FA_LedgerMapping();
+        try
+        {
+            return BS_NOTES.SELECT_BS_NOTES(FINANCIAL_YR, COMP_NAME);
+        }
+        catch
+        {
+            throw;
+        }
+        finally
+        {
+            BS_NOTES = null;
+        }
+    }
+
+
+   public DataTable SELECT_BS_NOTES(string FINANCIAL_YR, string COMP_NAME)
+    {
+        SqlConnection conn = new SqlConnection(connStr);
+        SqlDataAdapter dAd = new SqlDataAdapter("USP_Select_BS_Notes", conn);
+        dAd.SelectCommand.CommandType = CommandType.StoredProcedure;
+        DataTable dt = new DataTable();
+        try
+        {
+            dAd.SelectCommand.Parameters.AddWithValue("@FINANCIAL_YR", FINANCIAL_YR);
+            dAd.SelectCommand.Parameters.AddWithValue("@COMP_NAME ", COMP_NAME);
+            dAd.Fill(dt);
+            return dt;
+        }
+        catch
+        {
+            throw;
+        }
+        finally
+        {
+            dt.Dispose();
+            dAd.Dispose();
+            conn.Close();
+            conn.Dispose();
+        }
+    }
